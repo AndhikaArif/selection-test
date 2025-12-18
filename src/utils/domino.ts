@@ -33,13 +33,16 @@ export function sortDominoes(dominoes: Domino[], order: "asc" | "desc") {
 }
 
 export function removeDuplicate(dominoes: Domino[]) {
-  const seen = new Set<string>();
+  const countMap = new Map<string, number>();
+
+  for (const [a, b] of dominoes) {
+    const key = `${Math.min(a, b)}-${Math.max(a, b)}`;
+    countMap.set(key, (countMap.get(key) || 0) + 1);
+  }
 
   return dominoes.filter(([a, b]) => {
     const key = `${Math.min(a, b)}-${Math.max(a, b)}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
+    return countMap.get(key) === 1;
   });
 }
 
